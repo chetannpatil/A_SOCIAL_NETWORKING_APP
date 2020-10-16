@@ -4,10 +4,12 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
+import javax.persistence.Table;
 //@NamedNativeQuery(name ="loggedUsersPendingInvitationsQuery",
 //query ="select * from INVITATION where invitationToUser_userid = ? and isInvitationAccepted = false",resultClass=Invitation.class)
 //@NamedNativeQuery(name="delete",query="delete from INVITATION where inviteId = ?")
@@ -17,11 +19,12 @@ import javax.persistence.NamedNativeQuery;
 
 @NamedNativeQueries({@NamedNativeQuery(name ="loggedUsersPendingInvitationsQuery",query ="select * from INVITATION where invitationToUser_userid = ? and isInvitationAccepted = false",resultClass=Invitation.class)
 ,@NamedNativeQuery(name="del",query="delete from INVITATION where inviteId = ?")})
+//@Table(name = "INVITATION")
 public class Invitation
 {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long inviteId ;
 	
 	@ManyToOne

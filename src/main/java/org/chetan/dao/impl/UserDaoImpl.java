@@ -1,11 +1,16 @@
 package org.chetan.dao.impl;
 
+import java.io.IOException;
 import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Base64;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 
 import org.chetan.dao.UserDao;
 import org.chetan.model.User;
@@ -14,6 +19,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 
 //SELECT * FROM "PUBLIC"."USER" where email like '%b%'  or password  like '%a%'
@@ -145,6 +151,57 @@ public class UserDaoImpl implements UserDao
 		List<User> ls = (List<User>)q.list();
 		Set<User> resuSet = new LinkedHashSet<User>(ls);
 		return resuSet ;
+	}
+	
+	@Override
+	public User updateProfilePic(long userId, MultipartFile profilePic) throws IOException, 
+	SerialException, SQLException
+	{
+
+		
+		System.out.println("\n UserDaoImpl-updateProfilePic -userBean=\n  "+userId);
+		
+		Session session = getSession();
+		
+		User olduser = session.get(User.class, userId);
+				 
+		//olduser.setDp(null);
+		olduser.setProfilePic(null);
+		
+		session.update(olduser);
+		System.out.println("\n UserDaoImpl-updateProfilePic -olduser updated to null DP =\n  "+olduser);
+		
+		//LOGGER.info("\n UserDaoImpl-updateProfilePic -olduser updated to null DP =\n  "+olduser);
+		
+		User newuser = session.get(User.class, userId);
+		
+		//newuser.setProfilePic(userBean.getProfilePic());
+		
+		 byte[] byteArray = profilePic.getBytes();
+			
+		 System.out.println("\n byteArray = \n"+byteArray);
+		 
+		 //Blob dp = new SerialBlob(byteArray);
+		 
+		 //newuser.setDp(dp);
+		 
+		 newuser.setProfilePic(byteArray);
+		 
+		
+		
+		 System.out.println("\n UserDaoImpl-updateProfilePic -after setting base64 user  =\n  "+newuser);
+			
+		session.update(newuser);
+		
+		//LOGGER.info("\n UserDaoImpl-updateProfilePic -updated newdp   =\n  ");
+		
+		 User updateduser = session.get(User.class,userId);
+		 
+		 //LOGGER.info("\n UserDaoImpl-updateProfilePic -updateduser  =\n  "+updateduser);
+		
+		 System.out.println("\n UserDaoImpl-updateProfilePic -updateduser  =\n  "+updateduser);
+		 
+		 return updateduser ;
 	}
 	
 	/*@Override

@@ -1,7 +1,12 @@
 package org.chetan.service.impl;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
+
+import javax.sql.rowset.serial.SerialException;
+
 import org.chetan.dao.UserDao;
 import org.chetan.model.User;
 import org.chetan.service.UserService;
@@ -9,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
         //userServiceImpl
 @Service("userServiceImpl")
@@ -88,6 +94,16 @@ public class UserServiceImpl implements UserService
 	{
 		System.out.println("Userservicimpl advcserch()");
 		return userDaoImpl.advancedSearch(firstName, lastName, email,city, state, country);
+	}
+
+	@Override
+	public User updateProfilePic(long userId, MultipartFile profilePic) throws IOException, SerialException, SQLException
+	{
+     //LOGGER.info("UserServiceImpl-updateProfilePic -userBean=\n  "+userBean);
+		
+		System.out.println("UserServiceImpl-updateProfilePic -userBean=\n  "+userId);
+		
+		return userDaoImpl.updateProfilePic(userId,profilePic);
 	}
 
 /*	@Override

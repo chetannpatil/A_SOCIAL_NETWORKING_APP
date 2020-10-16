@@ -1,21 +1,27 @@
 package org.chetan.model;
 
+import java.sql.Blob;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Past;
 
 import org.chetan.util.RemoveExtraSpacesFromALine;
@@ -33,11 +39,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 		@NamedNativeQuery(name = "updateEditedLUSBQuery",query = "Update User set firstName = ?,lastName = ?"
 				+ "gender = ?,houseNumber = ?,street = ?,city = ?,zip =?,state = ?, country = ?,dob = ?,"
 				+ "moreAboutMe = ?,maritalStatus = ?,")})
+//@Table(name = "INDIVIDUAL")
 public class User 
 {
 
+	
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	//@Column(name = "individual_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	@GeneratedValue
 	private long userId ;
 	
 	@NotEmpty(message ="First name is mandatory & it will be displayed as profile name")
@@ -97,11 +107,45 @@ public class User
 	private String profession;
 	
 	
-/*	//DP
-	@Lob
-	@Column(name ="DP")
-	private Blob dp ;*/	
+	//DP
+//	@Lob
+//	@Column(name ="DP")
+//	private Blob dp ;	
 
+	@Lob
+	private byte [] profilePic ;
+	
+	private transient String base64Image;
+	
+	
+
+	
+	public String getBase64Image() 
+	{
+		System.out.println("\n User - getBase64Image -base64image = \n"+this.base64Image);
+		return base64Image;
+	}
+
+	public void setBase64Image(String image)
+	{
+		System.out.println("\n User - setBase64Image -passsed base64image = \n"+image);
+		
+		System.out.println("\n current base64image = \n"+this.base64Image);
+		
+		this.base64Image = image;
+		
+		
+	}
+
+
+
+	public byte[] getProfilePic() {
+		return profilePic;
+	}
+
+	public void setProfilePic(byte[] profilePic) {
+		this.profilePic = profilePic;
+	}
 
 	public String getQualification() {
 		return qualification;
@@ -205,17 +249,17 @@ public class User
 	}
 
 	
+
+
+
+
 	@Override
-	public String toString() 
-	{
-		System.out.println("USEr toStrig()");
-		return "User [userId=" + userId + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", gender=" + gender + ", email="
-				+ email + ", password=" + password + ", address=" + address
-				+ ", dob=" + dob + ", moreAboutMe=" + moreAboutMe
-				+ ", maritalStatus=" + maritalStatus + ", isActiveMember="
-				+ isActiveMember + ", qualification=" + qualification
-				+ ", profession=" + profession + "]";
+	public String toString() {
+		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", gender=" + gender
+				+ ", email=" + email + ", password=" + password + ", address=" + address + ", dob=" + dob
+				+ ", moreAboutMe=" + moreAboutMe + ", maritalStatus=" + maritalStatus + ", isActiveMember="
+				+ isActiveMember + ", qualification=" + qualification + ", profession=" + profession + ", profilePic="
+				+ Arrays.toString(profilePic) + ", base64Image=" + base64Image + "]";
 	}
 
 	public String getRepeatPassword() {

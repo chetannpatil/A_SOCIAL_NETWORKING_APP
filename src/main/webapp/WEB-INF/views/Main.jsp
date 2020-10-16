@@ -18,8 +18,30 @@
 <tr height='170'>
 <td id='tdHome' align='center'>
 <h1 style="color: maroon;">Your Best D.P</h1>
-<img alt="" src="User/image.html?id=${dp }" height="100" width="100">
-<a href="#" style="color: maroon;">Change D.P</a>
+<%-- <img alt="" src="User/image.html?id=${dp }" height="100" width="100"> --%>
+
+
+ 
+<%--  <img src="data:image/jpg;base64,${userBean.base64Image}" width="200" height="200"/> --%>
+ 
+  <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="200" height="200"/>
+  
+  
+ 
+<a href="openUploadProfilePicOption" style="color: maroon;">Change D.P</a>
+
+<c:if test="${isUserLikeToAddOrChangeDP}">
+
+
+<form action="uploadProfilePic" enctype = "multipart/form-data" method = "post">
+
+<input name="profilePic" type="file"/>
+<input type="submit" value="UPLOAD DP">
+
+</form>
+
+</c:if>
+
 </td>
 
 <td id='tdAbout'align='center' >

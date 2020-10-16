@@ -1,5 +1,9 @@
 package org.chetan.controller;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -11,8 +15,12 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.chetan.model.Invitation;
 import org.chetan.model.Message;
 import org.chetan.model.User;
@@ -33,10 +41,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller("/BestFriend")
 public class HomeController
 {	
+	
+
 	@Autowired
 	UserService userServiceImpl ;
 	
@@ -48,6 +59,8 @@ public class HomeController
 	
 	@Autowired
 	WallService wallServiceImpl ;
+	
+	private static final Logger LOGGER = LogManager.getLogger(HomeController.class);
 	
 	@RequestMapping("/")
 	public String showHome(Model m)
@@ -297,6 +310,24 @@ public class HomeController
 					m.addAttribute("dp",Base64.encodeBase64(dp.getBytes(0L, (int)dp.length())));
 				}*/
 				//adding userbean to session
+				
+				
+				// Blob dp = userBeanOriginal.getDp();
+//				if(dp != null)
+//				{
+//					//String base64Image = Base64.getEncoder().encodeToString(userProfile.getProfilePic());
+//					
+//					byte[] dpByteArray = SerialBlob
+//					String base64Image = Base64.getEncoder().encodeToString(dpByteArray);
+//					
+//				}
+				if(userBeanOriginal.getProfilePic() != null)
+				{
+					System.out.println("\n user-login-yes logged user has dp already "
+							+ "so setting baseimage , blobdp = \n"+userBeanOriginal.getProfilePic());
+					userBeanOriginal = getBase64ImageSetUser(userBeanOriginal, userBeanOriginal.getProfilePic());
+				}
+				
 				hs.setAttribute("loggedUserBean", userBeanOriginal);
 					m.addAttribute("userBean", userBeanOriginal) ;
 					List<Wall> allWallsList = loadAllWalls(userBeanOriginal);
@@ -651,6 +682,12 @@ public class HomeController
 			}
 			//load all walls & add to Model
 			List<Wall> allWallsList = loadAllWalls(oneUserBean);
+			
+			//add oneusers dp
+			if(oneUserBean.getProfilePic() != null)
+			{
+				oneUserBean = getBase64ImageSetUser(oneUserBean, oneUserBean.getProfilePic());
+			}
 			m.addAttribute("allWallsList", allWallsList);
 			m.addAttribute("oneUserBean", oneUserBean);
 			return "OneUsersMain";
@@ -1927,4 +1964,129 @@ public class HomeController
 			return "Error";
 		}
 	}
+	
+	
+	
+	
+	
+	                          //openUploadProfilePicOption
+    @RequestMapping(value = "/openUploadProfilePicOption",method = RequestMethod.GET)
+		public String openChngeDpView(Model m)
+		{
+			System.out.println("HC'c openChngeDpView()");
+			LOGGER.info("BFC-openChngeDpView-");
+			//User dpUserBean = new User();
+			//m.addAttribute("dpUserBean", dpUserBean);
+			boolean isUserLikeToAddOrChangeDP = true ;
+			
+			m.addAttribute("isUserLikeToAddOrChangeDP", isUserLikeToAddOrChangeDP);
+			
+			return "Main";
+			//addOrChangeDP
+			//return "ChangeDp";
+		}
+    
+    
+	@RequestMapping(value = "/uploadProfilePic",method = RequestMethod.POST)
+	public String uploadProfilePic(@RequestParam("profilePic") MultipartFile profilePic,
+			HttpSession session,Model m)
+	{
+		LOGGER.info("\n UserProfileController -uploadProfilePic -  \n");
+		System.out.println("\n UserProfileController -uploadProfilePic -  \n");
+		String dpStatusStr = "";
+		try
+		{
+			if(profilePic == null || profilePic.isEmpty())
+			{
+			
+				System.out.println("\n UserProfileController -uploadProfilePic - profilePic i snull or empty .. so stoping\n");
+				throw new Exception("please upload image photo");
+			}
+
+			 
+			User userBean = (User)session.getAttribute("loggedUserBean");
+			
+			
+			 System.out.println("\n loggedUserBean = \n"+userBean);
+			
+			//call local api update
+			//User updatedProfile = updateProfilePic(userBean);
+			
+			User updatedProfile = updateProfilePic(userBean.getUserId(),profilePic);
+			
+			LOGGER.info("\n BFC-updatedProfile = \n"+updatedProfile);
+			
+			System.out.println("\n BFC-updatedProfile = \n"+updatedProfile);
+			
+			//User userBean = (User)session.getAttribute("loggedUserBean");
+			
+			 //set base64image also to loggeduserbean
+			
+			//call local api to set base64image
+			User Base64ImageSetUser = getBase64ImageSetUser(updatedProfile,updatedProfile.getProfilePic());
+			
+			
+				System.out.println("\n user -uploadProfilePic -\n");
+			 
+			//update to session, swap userbeans
+			session.setAttribute("loggedUserBean", Base64ImageSetUser);
+			
+		    dpStatusStr = "Dp updated succesessionfully  ";
+						
+			m.addAttribute("successMessage", dpStatusStr);
+			
+			
+			return "Main";
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			LOGGER.error("UserProfileController - uploadProfilePic - Exception ",e);
+			
+			System.out.println("UserProfileController - uploadProfilePic - Exception "+e.getLocalizedMessage());
+			
+			m.addAttribute("errorMessage", e.getLocalizedMessage());
+			
+			return "Main" ;
+		}
+	}
+	
+	
+
+	//local
+	private User updateProfilePic(long userId,MultipartFile profilePic) throws IOException,
+	SerialException, SQLException
+	{
+		LOGGER.info("\n UserProfileController -updateProfilePic -  \n");
+		
+		System.out.println("\n UserProfileController -updateProfilePic -  \n");
+		
+		//User updatedProfile = userProfileService.updateProfilePic(userBean);
+		
+		User updatedProfile = userServiceImpl.updateProfilePic(userId,profilePic);
+		
+		return updatedProfile;
+	}
+	
+	private User getBase64ImageSetUser(User updatedProfile, byte[] picByeArray)
+	{
+		System.out.println("\n UserProfileController -getBase64ImageSetUser- - User =  \n"+updatedProfile);
+		System.out.println("\n Blob =  \n"+picByeArray);
+		
+		//String base64Image = Base64.getEncoder().encodeToString(userProfile.getProfilePic());
+		
+		//byte[] dpByteArray = SerialBlob
+				
+				 //set base64image also
+				 String base64Image = Base64.getEncoder().encodeToString(picByeArray);
+		
+				// newuser.setBase64Image(base64Image);
+
+				 updatedProfile.setBase64Image(base64Image);
+		System.out.println("\n UserProfileController-getBase64ImageSetUser -afterseeting base64image "
+				+ "= \n"+updatedProfile);		 
+		
+				 return updatedProfile;
+	}
+	
 }//end of class

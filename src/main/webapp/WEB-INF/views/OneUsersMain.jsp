@@ -44,7 +44,13 @@
 
 <table  border='1' style="width:80%" align="center">
 <tr height='170'>
-<td align='center'><h1  style="color: green;">${oneUserBean.firstName }  ${oneUserBean.lastName}'s  D.P</h1>
+<td align='center'>
+
+<%-- <h1  style="color: green;">${oneUserBean.firstName }  ${oneUserBean.lastName}'s  D.P</h1> --%>
+
+ <img src="data:image/jpg;base64,${oneUserBean.base64Image}" width="200" height="200"/>
+ 
+
 </td>
 
 
