@@ -39,6 +39,12 @@ Date
 
 <td style="color: red;">
 <b>You</b>
+
+<c:if test="${loggedUserBean.profilePic != null}">
+ <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="50" height="50"/>
+</c:if>
+
+
 </td>
 
 <td style="color: maroon;">
@@ -48,6 +54,19 @@ Date
 <input type="submit" value="${messageBean.messageToUser.firstName }  ${messageBean.messageToUser.lastName }"
 style="color: white;background-color: green;">
 </s:form>
+
+<!-- photo -->
+
+<%--  <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="200" height="200"/> --%>
+
+<c:if test="${messageBean.messageToUser.profilePic != null}">
+ <img src="data:image/jpg;base64,${messageBean.messageToUser.base64Image}" width="50" height="50"/>
+</c:if>
+
+
+
+
+
 </td>
 </c:if>
 
@@ -60,10 +79,27 @@ style="color: white;background-color: green;">
 <input type="submit" value="${messageBean.messageFromUser.firstName }  ${messageBean.messageFromUser.lastName }"
 style="color: white;background-color: green;">
 </s:form>
+
+<!-- photo -->
+
+<%--  <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="200" height="200"/> --%>
+
+ 
+ 
+ <c:if test="${messageBean.messageFromUser.profilePic != null}">
+ <img src="data:image/jpg;base64,${messageBean.messageFromUser.base64Image}" width="50" height="50"/>
+</c:if>
+
 </td>
 
 <td style="color: red;">
 <b>You</b>
+
+<c:if test="${loggedUserBean.profilePic != null}">
+ <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="50" height="50"/>
+</c:if>
+
+
 </td>
 </c:if>
 

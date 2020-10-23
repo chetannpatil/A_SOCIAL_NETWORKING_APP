@@ -204,6 +204,7 @@ public class UserDaoImpl implements UserDao
 		 return updateduser ;
 	}
 	
+	
 	/*@Override
 	public Blob loadDP(long userId) 
 	{
@@ -212,7 +213,35 @@ public class UserDaoImpl implements UserDao
 		return b ;
 	}*/
 
-	
+	@Override
+	public boolean removeDP(long userId)
+	{
+		 System.out.println("\n UserDaoImpl-removeDP -  =\n  "+userId);
+		 
+		 User user = getSession().get(User.class, userId);
+		 
+		 user.setProfilePic(null);
+		 
+		 //call localapi to update
+		 
+		 update(user);
+		 
+		 //check
+		 User user2 = find(userId);
+		 
+		 if(user2.getProfilePic() != null)
+		 {
+			 System.out.println("\n dp is notnull \n");
+			 
+			 return false ;
+		 }
+		 else
+		 {
+			 System.out.println("\n dp is null \n");
+			 return true;
+		 }
+			
+	}
 
 	
 

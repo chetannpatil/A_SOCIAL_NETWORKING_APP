@@ -14,6 +14,17 @@
 <h2 style="color: maroon;" align="center">Enter new Details for the fields you want to change & save</h2>
 <s:form action="updateEditedAccount" modelAttribute="updatedLoggedUserBean"  method="POST" >
 
+ <s:input path="password" readonly="true" type="hidden"/>
+ <s:input path="repeatPassword" readonly="true" type="hidden"/>
+ 
+ 
+  <s:input path="profilePic" readonly="true" type="hidden"/>
+
+
+
+
+ 
+ 
 <table align="center" border="0" bordercolor="maroon">
 <tr>
 <td>
@@ -168,14 +179,16 @@ COUNTRY
 EMAIL
 </td>
 <td>
- <s:input path="email" readonly="true"/> Unchangeable Sorry
+<%--  <s:input path="email" readonly="true"/> Unchangeable Sorry --%>
+ 
+ <s:input path="email" hidden="true"/> 
+ <label> ${updatedLoggedUserBean.email }</label>
 </td>
 </tr>
 
 
 </table>
- <s:input path="password" readonly="true" type="hidden"/>
- <s:input path="repeatPassword" readonly="true" type="hidden"/>
+
 
 <h2 align="center">
 <input type="submit" value="Save Changes " style="color: white; background-color: red" /> 

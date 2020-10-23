@@ -24,6 +24,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Past;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.chetan.util.RemoveExtraSpacesFromALine;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -40,7 +42,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 				+ "gender = ?,houseNumber = ?,street = ?,city = ?,zip =?,state = ?, country = ?,dob = ?,"
 				+ "moreAboutMe = ?,maritalStatus = ?,")})
 //@Table(name = "INDIVIDUAL")
-public class User 
+public class User implements Comparable<User>
 {
 
 	
@@ -117,13 +119,16 @@ public class User
 	
 	private transient String base64Image;
 	
-	
+	private static final Logger LOGGER = LogManager.getLogger(User.class);
 
 	
 	public String getBase64Image() 
 	{
 		System.out.println("\n User - getBase64Image -base64image = \n"+this.base64Image);
-		return base64Image;
+		
+		LOGGER.info("\n User - getBase64Image -base64image = \n"+this.base64Image);
+		
+		return this.base64Image;
 	}
 
 	public void setBase64Image(String image)
@@ -131,6 +136,10 @@ public class User
 		System.out.println("\n User - setBase64Image -passsed base64image = \n"+image);
 		
 		System.out.println("\n current base64image = \n"+this.base64Image);
+		
+		LOGGER.info("\n User - setBase64Image -passsed base64image = \n"+image);
+		
+		LOGGER.info("\n current base64image = \n"+this.base64Image);
 		
 		this.base64Image = image;
 		
@@ -254,12 +263,14 @@ public class User
 
 
 	@Override
-	public String toString() {
+	public String toString() 
+	{
+		System.out.println("USer-toString()");
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", gender=" + gender
 				+ ", email=" + email + ", password=" + password + ", address=" + address + ", dob=" + dob
 				+ ", moreAboutMe=" + moreAboutMe + ", maritalStatus=" + maritalStatus + ", isActiveMember="
-				+ isActiveMember + ", qualification=" + qualification + ", profession=" + profession + ", profilePic="
-				+ Arrays.toString(profilePic) + ", base64Image=" + base64Image + "]";
+				+ isActiveMember + ", qualification=" + qualification + ", profession=" + profession + ", base64Image="
+				+ base64Image + "]";
 	}
 
 	public String getRepeatPassword() {
@@ -631,4 +642,20 @@ public class User
 		
 		}
     }
+
+	@Override
+	public int compareTo(User user) 
+	{
+		if(this.getFirstName().equalsIgnoreCase(user.getFirstName()))
+		{
+			System.out.println("\n USer - compareTo - same names\n");
+			return 1;
+		}
+		else
+		{
+			System.out.println("\n USer - compareTo - diff  names\n");
+			return this.getFirstName().compareToIgnoreCase(user.getFirstName());
+		}
+	}
 }
+//end class

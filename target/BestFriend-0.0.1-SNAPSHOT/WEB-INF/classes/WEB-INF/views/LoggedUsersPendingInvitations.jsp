@@ -14,18 +14,33 @@
 <h2 style="color: maroon;" align="center">${noPendingInvitationsMessage }</h2>
 <h3 style="color: maroon;" align="center">${sentInvitationStatusMessage }</h3>
 <h3 style="color: green;" align="center">${bfAcceptedMessage }</h3>
+
+<%-- <h6>${allPendingInvtSet.size()}</h6> --%>
+
+
 <c:if test="${!empty allPendingInvtSet }">
 
+<h3 align="center">Followings are your best friends requests.</h3>
 <table border='1' style="width:80%" align="center">
-<tr>
-<td style="color: green;">
-Followings are your best friends requests.
-</td>
-</tr>
+
 <c:forEach var="invitationBean" items="${allPendingInvtSet}">
 
 <tr>
-<td style="color: maroon;">
+
+<td width="50" height="50">
+
+<c:if test="${invitationBean.invitationFromUser.profilePic != null}">
+
+<!-- photo -->
+ <img src="data:image/jpg;base64,${invitationBean.invitationFromUser.base64Image}" width="50" height="50"/>
+</c:if>
+
+ </td>
+
+ 
+
+
+<td style="color: maroon;" >
 <s:form action="showOneUserProfile" >
 
 <input type="hidden" name="oneUserEmail" value="${invitationBean.invitationFromUser.email }">
@@ -41,7 +56,7 @@ ${invitationBean.invitationFromUser.email }
 </td>
 
 <td width="75">
-<form action="acceptAsBF" >
+<form action="acceptAsBF" method="POST">
 <input type="hidden" name="inviteId" value="${invitationBean.inviteId }">
 
 <input type="submit" value="accept as BF" style="color: white;background-color: green;" >
@@ -49,7 +64,7 @@ ${invitationBean.invitationFromUser.email }
 </td>
 
 <td width="75">
-<form action="rejectBF">
+<form action="rejectBF" method="POST">
 <input type="hidden" name="inviteId" value="${invitationBean.inviteId }">
 <input type="submit" value="reject" style="color: white;background-color: red">
 </form>
@@ -68,6 +83,23 @@ ${invitationBean.invitationFromUser.email }
 <table align="center" border="1">
 <c:forEach var="invitationBean" items="${allBFReqSentByLUSBSet }">
 <tr>
+
+
+
+<!-- photo -->
+<td>
+<%--  <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="200" height="200"/> --%>
+
+
+ <c:if test="${invitationBean.invitationToUser.profilePic != null}">
+ 
+  <img src="data:image/jpg;base64,${invitationBean.invitationToUser.getBase64Image()}" width="50" height="50"/>
+  
+</c:if>
+
+</td>
+
+
 <td style="color: maroon;">
 <s:form action="showOneUserProfile" >
 

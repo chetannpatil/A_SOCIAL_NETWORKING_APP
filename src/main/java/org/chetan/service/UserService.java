@@ -28,4 +28,5 @@ public interface UserService
 	//Blob loadDP(long userId);
 	//User updateProfilePic(User userBean);
 	User updateProfilePic(long userId, MultipartFile profilePic) throws IOException, SerialException, SQLException;
+	boolean removeDP(long userId);
 }

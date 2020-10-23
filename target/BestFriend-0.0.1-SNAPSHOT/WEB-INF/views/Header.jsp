@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,11 +10,18 @@
 </head>
 <body>
 
-
+<%--  <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="100" height="100"/> --%>
 <table border="0" align="left">
 <tr >
 <td width="1800">
-<h1  style="color: red;" align="left">${loggedUserBean.firstName.toUpperCase()}   ${loggedUserBean.lastName.toUpperCase() }</h1>
+<h1  style="color: red;" align="left">${loggedUserBean.firstName.toUpperCase()}   ${loggedUserBean.lastName.toUpperCase() }
+
+<c:if test="${loggedUserBean.profilePic != null}">
+<img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="100" height="100"/>
+</c:if>
+
+ 
+ </h1>
 </td>
 
 <td width="200">

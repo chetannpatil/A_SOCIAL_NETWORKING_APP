@@ -24,6 +24,7 @@ public interface UserDao
 			String city,String state,String country);
 	//User updateProfilePic(User userBean);
 	User updateProfilePic(long userId, MultipartFile profilePic) throws IOException, SerialException, SQLException;
+	boolean removeDP(long userId);
 	
 //	Blob loadDP(long userId);
 	

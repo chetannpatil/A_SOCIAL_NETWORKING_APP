@@ -23,11 +23,26 @@
 <table align="center" border="0" style="color: green;">
 <c:forEach var="likedUserBean" items="${wallBean.likedUsersSet }">
 <tr>
+
+
+<c:if test="${likedUserBean.profilePic != null}">
+<td>
+<img src="data:image/jpg;base64,${likedUserBean.base64Image}" width="50" height="50"/>
+</td>
+</c:if>
+
+
+
 <td style="color: maroon;">
 <c:if test="${likedUserBean eq loggedUserBean }">
+
+
 <h4 style="color: green;">You</h4>
 </c:if>
 <c:if test="${likedUserBean ne loggedUserBean }">
+
+
+ 
 <s:form action="showOneUserProfile" >
 
 <input type="hidden" name="oneUserEmail" value="${likedUserBean.email }" style="color: maroon;">
@@ -38,6 +53,10 @@ style="color: white;background-color: green;">
 </c:if>
 </td>
 </tr>
+
+
+
+
 </c:forEach>
 </table>
 <br/>
@@ -49,12 +68,29 @@ style="color: white;background-color: green;">
 <table align="center" border="0" style="color: green;">
 <c:forEach var="hatedUserBean" items="${wallBean.hatedUsersSet }">
 <tr>
+
+
+ 
+ <c:if test="${hatedUserBean.profilePic != null}">
+   <td>
+      <img src="data:image/jpg;base64,${hatedUserBean.base64Image}" width="50" height="50"/>
+   </td>
+</c:if>
+
+
 <td style="color: maroon;">
+ 
 <c:if test="${hatedUserBean eq loggedUserBean }">
+
+
+ 
 <h4 style="color: green;">You</h4>
 </c:if>
 
 <c:if test="${hatedUserBean ne loggedUserBean }">
+
+
+ 
 <s:form action="showOneUserProfile" >
 
 <input type="hidden" name="oneUserEmail" value="${hatedUserBean.email }" style="color: maroon;">
@@ -64,7 +100,7 @@ style="color: white;background-color: green;">
 </s:form>
 </c:if>
 </td>
-</tr>
+
 </c:forEach>
 </table>
 

@@ -1,0 +1,73 @@
+<!-- photo -->
+<td>
+<%--  <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="200" height="200"/> --%>
+
+ <img src="data:image/jpg;base64,${invitationBean.invitationToUser.base64Image}" width="100" height="100"/>
+</td>
+
+
+//for each user set base64image
+for(User user:searchResultSet)
+			{
+				System.out.println("\n calling local api to set base64image to user =  \n"+user);
+				
+				if(user.getProfilePic() != null)
+				{
+					System.out.println("\n user.getProfilePic() != null \n");
+					
+					
+				}
+			}
+			
+			updateEditedAccount--
+
+<img src="data:image/jpg;base64,${entryBean.getKey().base64Image}" width="50" height="50"/>
+
+width="50" height="50"/>
+
+<c:if test="${loggedUserBean.profilePic != null}">
+</c:if>
+
+	@RequestMapping("/toMain")
+		public String toMain(Model m,HttpSession hs)
+		{
+			System.out.println("HC's toMain()");
+			try
+			{
+				/User loggedUserBean = (User)hs.getAttribute("loggedUserBean");
+				
+				List<Wall> allWallsList = loadAllWalls(loggedUserBean);
+				
+				Wall wallBean = new Wall() ;
+				
+				m.addAttribute("wallBean", wallBean);
+				
+				m.addAttribute("allWallsList", allWallsList);
+				
+				return "Main";
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				m.addAttribute("errorMessage", e.getLocalizedMessage());
+				return "Error";
+			}
+			
+		}
+		
+--
+return "Main";
+
+return toMain(m, hs);
+
+return toMain(m, loggedUserBean);
+
+
+,method = RequestMethod.POST)
+
+
+
+
+
+
+

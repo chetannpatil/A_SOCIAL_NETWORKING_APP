@@ -106,6 +106,8 @@ public class UserServiceImpl implements UserService
 		return userDaoImpl.updateProfilePic(userId,profilePic);
 	}
 
+	
+
 /*	@Override
 	public Blob loadDP(long userId) 
 	{
@@ -114,6 +116,12 @@ public class UserServiceImpl implements UserService
 		return userDaoImpl.loadDP(userId);
 	}*/
 
-	
+	@Override
+	public boolean removeDP(long userId)
+	{
+		System.out.println("UserServiceImpl-removeDP -userBean=\n  "+userId);
+		
+		return userDaoImpl.removeDP(userId);
+	}
 
 }

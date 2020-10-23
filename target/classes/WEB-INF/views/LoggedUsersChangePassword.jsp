@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>LoggedUsersChangePassword</title>
+<title>LoggedUsers Change Password</title>
 </head>
 <body>
 <h2 align="center" style="color: maroon;">${changePasswordStatusMessage}</h2>

@@ -19,7 +19,17 @@
 
 <c:forEach var="entryBean" items="${loggedUsersBFsMap.entrySet()}">
 <tr>
-<td>
+
+<td width="50" height="50">
+
+<c:if test="${entryBean.getKey().profilePic != null}">
+<!-- photo -->
+ <img src="data:image/jpg;base64,${entryBean.getKey().base64Image}" width="50" height="50"/>
+</c:if>
+
+</td>
+
+<td width="150" >
 <s:form action="showOneBFProfile" >
 <input type="hidden" name="oneUserEmail" value="${entryBean.getKey().email }">
 <input type="submit" value="${entryBean.getKey().firstName }  ${entryBean.getKey().lastName }"
@@ -28,6 +38,8 @@ style="color: white;background-color: green;">
 </s:form>
 </td>
 <td style="color: white;" bgcolor="maroon">You became friends on : ${entryBean.getValue().toString().substring(0,19) }</td>
+
+
 </tr>
 
 

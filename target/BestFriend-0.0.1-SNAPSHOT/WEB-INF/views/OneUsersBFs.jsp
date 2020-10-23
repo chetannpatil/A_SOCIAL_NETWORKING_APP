@@ -19,12 +19,28 @@
 <table align="center" border="0">
 <c:forEach var="userBean" items="${oneUsersBFsSet}">
 <tr>
+
+<td>
+
+
+<c:if test="${userBean.profilePic != null}">
+
+<img src="data:image/jpg;base64,${userBean.base64Image}" width="50" height="50"/>
+
+</c:if>
+
+</td>
+
+
 <td>
 <c:if test="${userBean eq loggedUserBean }">
 <b style="color: green;">You</b>
 </c:if>
 
 <c:if test="${userBean ne loggedUserBean }">
+
+
+
 <s:form action="showOneUserProfile" >
 <input type="hidden" name="oneUserEmail" value="${userBean.email }">
 <input type="submit" value="${userBean.firstName }  ${userBean.lastName }" 

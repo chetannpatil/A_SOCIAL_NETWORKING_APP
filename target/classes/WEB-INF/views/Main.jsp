@@ -18,17 +18,21 @@
 <tr height='170'>
 <td id='tdHome' align='center'>
 <h1 style="color: maroon;">Your Best D.P</h1>
-<%-- <img alt="" src="User/image.html?id=${dp }" height="100" width="100"> --%>
-
 
  
-<%--  <img src="data:image/jpg;base64,${userBean.base64Image}" width="200" height="200"/> --%>
- 
-  <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="200" height="200"/>
+ <c:if test="${loggedUserBean.profilePic != null}">
+   <img src="data:image/jpg;base64,${loggedUserBean.base64Image}" width="200" height="200"/>
+  </c:if>
   
   
- 
-<a href="openUploadProfilePicOption" style="color: maroon;">Change D.P</a>
+<!--  <pre> -->
+<hr>
+ <a href="openUploadProfilePicOption" style="color: maroon;">
+Add / Change D.P
+</a>
+
+<!--  </pre> -->
+
 
 <c:if test="${isUserLikeToAddOrChangeDP}">
 
@@ -41,6 +45,32 @@
 </form>
 
 </c:if>
+
+
+<hr>
+ <a href="openDeleteProfilePicOption" style="color: maroon;">
+Remove D.P
+</a>
+<!-- isUserLikeToDeleteDP -->
+
+<c:if test="${isUserLikeToDeleteDP}">
+
+<h3 style="color: maroon;">R U sure , u wanna delete DP?
+</h3>
+<a href="toMain" style="color: maroon;">
+NO
+</a>
+
+<br/>
+<br/>
+<form action="deleteProfilePic"  method = "GET">
+
+<input type="submit" value="YES">
+
+</form>
+
+</c:if>
+
 
 </td>
 
@@ -66,6 +96,17 @@
 <c:forEach var="userBean" items="${searchResultSet}">
 
 <tr>
+
+
+<!-- photo -->
+<td width="50">
+<c:if test="${userBean.profilePic != null}">
+ 
+  <img src="data:image/jpg;base64,${userBean.getBase64Image()}" width="50" height="50"/>
+  
+  </c:if>
+</td>
+
 
 <td style="color: maroon;">
 <s:form action="showOneUserProfile" >
@@ -110,6 +151,13 @@ ${userBean.dob.toString().substring(0,10) } ${userBean.address.street } ${userBe
 </c:forEach>
 </table>
 </c:if>
+<h3 align="center" style="color: red;">${errorMessage}</h3>
+
+<h3 align="center" style="color: green;">${successMessage}</h3>
+<!-- ---------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
 
 <h3 style="color: maroon;" align="center">${wallStatusMessage }</h3>
 
@@ -135,7 +183,13 @@ style="color: green;font-style: oblique;font-family: monospace;" >
 
 
 
+
+
+
+
 <h1 align="center" style="color: maroon;font-family: sans-serif;">WALL</h1>
+
+
 <h3 style="color: maroon;" align="center">${wallDeleteStatusMessage }</h3>
 <h3 style="color: maroon;" align="center">${likeWallStatusMessage }</h3>
 <h3 style="color: maroon;" align="center">${hateWallStatusMessage }</h3>
@@ -146,6 +200,17 @@ style="color: green;font-style: oblique;font-family: monospace;" >
 <c:forEach var="wallBean" items="${allWallsList}">
 
 <tr>
+
+<td width="50">
+<c:if test="${wallBean.wallFromUser.profilePic != null}">
+
+ <img src="data:image/jpg;base64,${wallBean.wallFromUser.base64Image}" width="50" height="50"/>
+
+</c:if>
+</td>
+ 
+
+
 <c:if test="${wallBean.wallFromUser  eq loggedUserBean }">
 <td style="color: red;">
 <b>
@@ -185,12 +250,13 @@ style="color: white;background-color: green;">
 <c:if test="${wallBean.wallFromUser ne loggedUserBean }">
 
 <td style="color: green;">
+
 <c:if test="${wallBean.likedUsersSet.contains(loggedUserBean) }">
 <b>You Liked it</b>
 </c:if>
 
 <c:if test="${!wallBean.likedUsersSet.contains(loggedUserBean) }">
-<form action="likeThisWall">
+<form action="likeThisWall" method="POST">
 <input type="hidden" name="wallId" value="${wallBean.wallId}">
 <input type="hidden" name="makeBFMessage" value="${makeBFMessage}">
 <input type="hidden" name="bfReqSentStatusMessage" value="${bfReqSentStatusMessage}">
@@ -216,7 +282,7 @@ style="color: white;background-color: green;">
 </c:if>
 
 <c:if test="${!wallBean.hatedUsersSet.contains(loggedUserBean) }">
-<form action="hateThisWall">
+<form action="hateThisWall" method="POST">
 <input type="hidden" name="wallId" value="${wallBean.wallId}">
 <input type="hidden" name="makeBFMessage" value="${makeBFMessage}">
 <input type="hidden" name="bfReqSentStatusMessage" value="${bfReqSentStatusMessage}">
